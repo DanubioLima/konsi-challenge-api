@@ -2,10 +2,14 @@ import { HttpService } from '@nestjs/axios';
 import { Injectable } from '@nestjs/common';
 import { firstValueFrom } from 'rxjs';
 import { BenefitDataResponse } from './konsi.types';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class KonsiService {
-  constructor(private readonly httpService: HttpService) {}
+  constructor(
+    private readonly httpService: HttpService,
+    private readonly configService: ConfigService,
+  ) {}
 
   async getBenefits(cpf: string): Promise<BenefitDataResponse[]> {
     const response = await this.getResponse(
@@ -17,8 +21,12 @@ export class KonsiService {
 
   private async getResponse(url: string) {
     const response = await firstValueFrom(
-      this.httpService.get(`https://teste-dev-api.konsi.dev/${url}`),
+      this.httpService.get(`${this.getBaseURL()}/${url}`),
     );
     return response.data;
+  }
+
+  private getBaseURL() {
+    return this.configService.get<string>('KONSI_BASE_URL');
   }
 }

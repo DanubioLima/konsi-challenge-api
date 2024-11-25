@@ -1,14 +1,20 @@
 import { Module } from '@nestjs/common';
 import { ElasticsearchModule } from '@nestjs/elasticsearch';
 import { SearchService } from './search.service';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 
 @Module({
   imports: [
-    ElasticsearchModule.register({
-      node: 'http://localhost:9200',
-      auth: {
-        apiKey: 'NWlscllKTUJjVGdOeldCczN2UEo6YWdhWE1XS3VRZmFXeWdqQTVXb2w2dw==',
-      },
+    ConfigModule,
+    ElasticsearchModule.registerAsync({
+      imports: [ConfigModule],
+      useFactory: async (configService: ConfigService) => ({
+        node: configService.get<string>('ELASTIC_API_URL'),
+        auth: {
+          apiKey: configService.get<string>('ELASTIC_API_KEY'),
+        },
+      }),
+      inject: [ConfigService],
     }),
   ],
   providers: [SearchService],

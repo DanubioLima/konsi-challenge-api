@@ -5,12 +5,14 @@ import { BenefitsConsumer } from '../../src/benefits/benefits.consumer';
 import nock from 'nock';
 import Redis from 'ioredis';
 import { SearchService } from '../../src/search/search.service';
+import { ConfigService } from '@nestjs/config';
 
 describe('BenefitsConsumer ', () => {
   let app: INestApplication;
   let redis: Redis;
   let consumer: BenefitsConsumer;
   let searchService: SearchService;
+  let configService: ConfigService;
 
   beforeEach(async () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
@@ -21,6 +23,7 @@ describe('BenefitsConsumer ', () => {
     consumer = app.get(BenefitsConsumer);
     redis = app.get<Redis>('REDIS_CLIENT');
     searchService = app.get(SearchService);
+    configService = app.get(ConfigService);
     redis.flushall();
 
     await app.init();
@@ -43,7 +46,7 @@ describe('BenefitsConsumer ', () => {
 
     mockElasticAddDocument();
 
-    const scope = nock('https://teste-dev-api.konsi.dev')
+    const scope = nock(configService.get('KONSI_BASE_URL'))
       .get(`/api/v1/inss/consulta-beneficios`)
       .query({ cpf: CPF })
       .reply(200, {
