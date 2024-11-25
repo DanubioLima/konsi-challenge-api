@@ -1,6 +1,6 @@
 export interface Benefit {
   numero_beneficio: string;
-  codigo_beneficio: string;
+  codigo_tipo_beneficio: string;
 }
 
 export interface BenefitDataResponse {

@@ -25,4 +25,32 @@ export class SearchService {
 
     return result.hits.hits.map((hit) => hit._source) || [];
   }
+
+  async findIfExistsByCpfAndBenefit(
+    index: string,
+    cpf: string,
+    benefit: string,
+  ) {
+    const result = await this.elasticsearchService.count({
+      index,
+      query: {
+        bool: {
+          must: [
+            {
+              term: {
+                numero_beneficio: benefit,
+              },
+            },
+            {
+              term: {
+                cpf,
+              },
+            },
+          ],
+        },
+      },
+    });
+
+    return result.count > 0;
+  }
 }

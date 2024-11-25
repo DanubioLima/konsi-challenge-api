@@ -42,7 +42,7 @@ describe('BenefitsConsumer ', () => {
       beneficios: [
         {
           numero_beneficio: '12345678910',
-          codigo_beneficio: '12345678910',
+          codigo_tipo_beneficio: '12345678910',
         },
       ],
     };

@@ -3,10 +3,18 @@ const { connect } = require('amqplib');
 
 async function publishMessages() {
   const queue = 'users_cpf';
+
   const messages = [
-    { cpf: '07254726344' },
-    { cpf: '07254726344' },
-    { cpf: '07254726344' },
+    { cpf: '34322835040' },
+    { cpf: '86923000041' },
+    { cpf: '34322835040' },
+    { cpf: '86923000041' },
+    { cpf: '56894687030' },
+    { cpf: '43351012012' },
+    { cpf: '56894687030' },
+    { cpf: '41502259079' },
+    { cpf: '43351012012' },
+    { cpf: '41502259079' },
   ];
 
   try {
@@ -15,9 +23,14 @@ async function publishMessages() {
 
     await channel.assertQueue(queue, { durable: true });
 
-    messages.forEach((msg) => {
-      channel.sendToQueue(queue, Buffer.from(JSON.stringify(msg)));
-    });
+    for (const msg of messages) {
+      console.log(`Publicando CPF ${msg.cpf} na fila ${queue}`);
+      channel.publish('amq.direct', 'users', Buffer.from(JSON.stringify(msg)), {
+        headers: {
+          'x-delay': 350,
+        },
+      });
+    }
 
     setTimeout(() => {
       connection.close();

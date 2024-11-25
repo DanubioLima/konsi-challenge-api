@@ -7,7 +7,10 @@ export class BenefitsController {
 
   @Get(':cpf')
   async searchByCpf(@Param('cpf') cpf: string) {
-    const results = await this.searchService.searchByCpf('benefits', cpf);
+    const results = await this.searchService.searchByCpf(
+      'benefits',
+      cpf.replace(/[.-]/g, ''),
+    );
     return results;
   }
 }

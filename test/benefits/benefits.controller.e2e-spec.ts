@@ -42,12 +42,12 @@ describe('BenefitsController ', () => {
     expect(response.body).toEqual([
       {
         numero_beneficio: '12345678910',
-        codigo_beneficio: '12345678910',
+        codigo_tipo_beneficio: '12345678910',
         cpf: '12345678900',
       },
       {
         numero_beneficio: '12345678910',
-        codigo_beneficio: '12345678910',
+        codigo_tipo_beneficio: '12345678910',
         cpf: '12345678900',
       },
     ]);
@@ -77,7 +77,7 @@ describe('BenefitsController ', () => {
             _score: 0.18232156,
             _source: {
               numero_beneficio: '12345678910',
-              codigo_beneficio: '12345678910',
+              codigo_tipo_beneficio: '12345678910',
               cpf: '12345678900',
             },
           },
@@ -87,7 +87,7 @@ describe('BenefitsController ', () => {
             _score: 0.18232156,
             _source: {
               numero_beneficio: '12345678910',
-              codigo_beneficio: '12345678910',
+              codigo_tipo_beneficio: '12345678910',
               cpf: '12345678900',
             },
           },
