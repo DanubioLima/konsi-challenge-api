@@ -44,6 +44,7 @@ export class BenefitsConsumer {
       );
     } finally {
       await mutex.release();
+      await redisClient.quit();
     }
   }
 

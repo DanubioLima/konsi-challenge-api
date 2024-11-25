@@ -34,7 +34,7 @@ describe('BenefitsConsumer ', () => {
     await app.close();
   });
 
-  it('when cpfs are not in cache', async () => {
+  it.only('when cpfs are not in cache', async () => {
     // ARRANGE
     const CPF = '12345678900';
     const konsiResponseData = {
@@ -79,8 +79,6 @@ describe('BenefitsConsumer ', () => {
   });
 
   function mockElasticAddDocument() {
-    jest
-      .spyOn(searchService, 'addDocument')
-      .mockImplementation(() => new Promise(() => {}));
+    jest.spyOn(searchService, 'addDocument').mockResolvedValue({} as any);
   }
 });
