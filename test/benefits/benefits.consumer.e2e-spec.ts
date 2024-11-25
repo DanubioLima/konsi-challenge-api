@@ -1,14 +1,16 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { INestApplication } from '@nestjs/common';
 import { AppModule } from '../../src/app.module';
-import { UserConsumer } from '../../src/users/user.consumer';
-import * as nock from 'nock';
+import { BenefitsConsumer } from '../../src/benefits/benefits.consumer';
+import nock from 'nock';
 import Redis from 'ioredis';
+import { SearchService } from '../../src/search/search.service';
 
-describe('UserConsumer ', () => {
+describe('BenefitsConsumer ', () => {
   let app: INestApplication;
   let redis: Redis;
-  let consumer: UserConsumer;
+  let consumer: BenefitsConsumer;
+  let searchService: SearchService;
 
   beforeEach(async () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
@@ -16,22 +18,30 @@ describe('UserConsumer ', () => {
     }).compile();
 
     app = moduleFixture.createNestApplication();
-    consumer = app.get(UserConsumer);
+    consumer = app.get(BenefitsConsumer);
     redis = app.get<Redis>('REDIS_CLIENT');
+    searchService = app.get(SearchService);
     redis.flushall();
 
     await app.init();
   });
 
-  it.only('when cpfs are not in cache', async () => {
+  afterEach(async () => {
+    await redis.quit();
+    await app.close();
+  });
+
+  it('when cpfs are not in cache', async () => {
     // ARRANGE
-    const CPF = '123.456.789-00';
+    const CPF = '12345678900';
     const konsiResponseData = [
       {
         numero_beneficio: '12345678910',
         codigo_beneficio: '12345678910',
       },
     ];
+
+    mockElasticAddDocument();
 
     const scope = nock('https://teste-dev-api.konsi.dev')
       .get(`/api/v1/inss/consulta-beneficios`)
@@ -51,4 +61,10 @@ describe('UserConsumer ', () => {
 
     expect(JSON.parse(redisData)).toEqual(konsiResponseData);
   });
+
+  function mockElasticAddDocument() {
+    jest
+      .spyOn(searchService, 'addDocument')
+      .mockImplementation(() => new Promise(() => {}));
+  }
 });

@@ -1,13 +1,13 @@
 import { HttpService } from '@nestjs/axios';
 import { Injectable } from '@nestjs/common';
 import { firstValueFrom } from 'rxjs';
-import { KonsiApiResponse } from './konsi.types';
+import { BenefitDataResponse } from './konsi.types';
 
 @Injectable()
 export class KonsiService {
   constructor(private readonly httpService: HttpService) {}
 
-  async getBenefits(cpf: string): Promise<KonsiApiResponse> {
+  async getBenefits(cpf: string): Promise<BenefitDataResponse[]> {
     const response = await this.getResponse(
       `api/v1/inss/consulta-beneficios?cpf=${cpf}`,
     );
