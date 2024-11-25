@@ -2,7 +2,7 @@
 const { connect } = require('amqplib');
 
 async function publishMessages() {
-  const queue = 'users_cpf';
+  const queue = 'benefits_cpf';
 
   const messages = [
     { cpf: '34322835040' },
@@ -25,11 +25,7 @@ async function publishMessages() {
 
     for (const msg of messages) {
       console.log(`Publicando CPF ${msg.cpf} na fila ${queue}`);
-      channel.publish('amq.direct', 'users', Buffer.from(JSON.stringify(msg)), {
-        headers: {
-          'x-delay': 350,
-        },
-      });
+      channel.sendToQueue(queue, Buffer.from(JSON.stringify(msg)));
     }
 
     setTimeout(() => {
