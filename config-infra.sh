@@ -19,5 +19,14 @@ docker compose up -d
 # Wait for the containers to start
 sleep 5
 
+# Create the index
+curl -X PUT "http://localhost:9200/benefits" \
+-H "Content-Type: application/json" \
+-H "Authorization: ApiKey $ES_API_KEY" \
+-d '{
+  "settings": {},
+  "mappings": {}
+}'
+
 # Start the backend
 npm run start:dev

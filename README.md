@@ -1,4 +1,4 @@
-# Konsi Challenge App
+# ![Konsi Logo](konsi-logo.svg) Konsi Challenge App
 
 API feita para o challenge técnico da Konsi.
 
@@ -14,7 +14,13 @@ Recomendo a execução em sistemas Linux derivados de Debian e com a versão LTS
 gh repo clone DanubioLima/konsi-challenge-api
 ```
 
-2. Instale as dependências:
+2. Entre na pasta do projeto:
+
+```bash
+cd konsi-challenge-api
+```
+
+3. Instale as dependências:
 
 ```bash
 npm install
@@ -26,13 +32,23 @@ ou
 npm ci
 ```
 
-3. Dê permissão de execução ao arquivo de configuração da infra:
+4. Configure as variáveis de ambiente:
+
+O arquivo `.env.development` já vem configurado com o que é preciso para executar o projeto com exceção das credenciais da API da Konsi. Por segurança não coloquei elas no repositório. 
+
+```bash
+KONSI_USERNAME=your-credentials
+KONSI_PASSWORD=your-credentials
+```
+
+
+5. Dê permissão de execução ao arquivo de configuração da infra:
 
 ```bash
 chmod +x ./config-infra.sh
 ```
 
-4. Execute o script:
+6. Execute o script:
 
 **Importante: Execute apenas uma vez ao baixar o projeto.**
 
@@ -40,7 +56,7 @@ chmod +x ./config-infra.sh
 ./config-infra.sh
 ```
 
-Esse primeiro passo é um pouco demorado pois o ElasticSearch roda os próprios containers com licença de teste. O script também já configura as variáveis de ambiente necessárias para o projeto, com exceção das variaveis `KONSI_USERNAME` e `KONSI_PASSWORD`, que devem ser preenchidas manualmente com as credenciais de acesso a API da Konsi. Evitei expor elas aqui por segurança.
+Esse primeiro passo é um pouco demorado pois o ElasticSearch roda os próprios containers com licença de teste. 
 O script já executará automaticamente a API subindo o servidor na porta 3000.
 
 Nesse ponto deve ser criado uma pasta `elastic-start-local` que a própria instalação do ElasticSearch cria. Recomendo não alterar nenhum arquivo lá.
