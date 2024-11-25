@@ -32,7 +32,7 @@ export class BenefitsConsumer {
     await this.redis.set(cpf, JSON.stringify(response));
 
     await Promise.all(
-      response.map(async (benefit) => {
+      response.beneficios.map(async (benefit) => {
         this.searchService.addDocument('benefits', {
           ...benefit,
           cpf: cpf,

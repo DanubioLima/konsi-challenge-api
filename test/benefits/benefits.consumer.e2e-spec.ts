@@ -37,12 +37,15 @@ describe('BenefitsConsumer ', () => {
   it('when cpfs are not in cache', async () => {
     // ARRANGE
     const CPF = '12345678900';
-    const konsiResponseData = [
-      {
-        numero_beneficio: '12345678910',
-        codigo_beneficio: '12345678910',
-      },
-    ];
+    const konsiResponseData = {
+      cpf: CPF,
+      beneficios: [
+        {
+          numero_beneficio: '12345678910',
+          codigo_beneficio: '12345678910',
+        },
+      ],
+    };
 
     mockElasticAddDocument();
 
@@ -52,6 +55,16 @@ describe('BenefitsConsumer ', () => {
       .reply(200, {
         success: true,
         data: konsiResponseData,
+      });
+
+    nock(configService.get('KONSI_BASE_URL'))
+      .post('/api/v1/token')
+      .reply(200, {
+        success: true,
+        data: {
+          token: '1234567890',
+          expiresIn: new Date(Date.now() + 30 * 60 * 1000).toISOString(),
+        },
       });
 
     // ACT
