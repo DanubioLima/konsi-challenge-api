@@ -1,4 +1,8 @@
-# ![Konsi Logo](konsi-logo.svg) Konsi Challenge App
+<p align="center">
+    <img src="konsi-logo.svg" alt="Konsi Logo">
+</p>
+
+# Konsi Challenge App
 
 API feita para o challenge técnico da Konsi.
 
