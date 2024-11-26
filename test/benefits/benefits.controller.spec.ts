@@ -1,5 +1,5 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { INestApplication } from '@nestjs/common';
+import { INestApplication, ValidationPipe } from '@nestjs/common';
 import { AppModule } from '../../src/app.module';
 import Redis from 'ioredis';
 import request from 'supertest';
@@ -16,6 +16,7 @@ describe('BenefitsController ', () => {
     }).compile();
 
     app = moduleFixture.createNestApplication();
+    app.useGlobalPipes(new ValidationPipe());
     redis = app.get<Redis>('REDIS_CLIENT');
     elasticsearchService = app.get(ElasticsearchService);
     redis.flushall();
@@ -51,6 +52,21 @@ describe('BenefitsController ', () => {
         codigo_tipo_beneficio: '12345678910',
         cpf: '12345678900',
       },
+    ]);
+  });
+
+  it('should not accept cpf with wrong length', async () => {
+    // ARRANGE
+    const CPF = '123456789002830404004';
+
+    // ACT
+    const response = await request(app.getHttpServer())
+      .get(`/benefits/${CPF}`)
+      .expect(400);
+
+    // ASSERT
+    expect(response.body.message).toEqual([
+      'cpf must be shorter than or equal to 14 characters',
     ]);
   });
 
