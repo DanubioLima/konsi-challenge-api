@@ -35,7 +35,7 @@ describe('BenefitsConsumer ', () => {
     await app.close();
   });
 
-  it.only('when cpfs are not in cache', async () => {
+  it('when cpfs are not in cache', async () => {
     // ARRANGE
     const CPF = '12345678900';
     const konsiResponseData = {

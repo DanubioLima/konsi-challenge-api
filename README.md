@@ -10,7 +10,7 @@ API feita para o challenge técnico da Konsi.
 
 Como o ElasticSearch se tornou uma ferramenta proprietária eles impuseram algumas limitações para utilizar o software. Só é permitido executar
 localmente para fins de teste ou aprendizado. Criei um script simples para subir toda a parte de infraestrutura via Docker.
-Recomendo a execução em sistemas Linux derivados de Debian e com a versão LTS do Node instalada. Eu utilizei o Ubuntu 24.04 e o Node 23.3.0.
+Recomendo a execução em sistemas Linux derivados de Debian e com a versão LTS do Node instalada. Eu utilizei o Ubuntu 24.04 e recomendo Node **23.3.0**.
 
 1. Baixe o projeto:
 
