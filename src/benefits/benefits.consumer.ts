@@ -1,5 +1,5 @@
 import { RabbitSubscribe } from '@golevelup/nestjs-rabbitmq';
-import { Injectable, Inject } from '@nestjs/common';
+import { Injectable, Inject, Logger } from '@nestjs/common';
 import { Redis } from 'ioredis';
 import { KonsiService } from '../konsi/konsi.service';
 import { SearchService } from '../search/search.service';
@@ -14,6 +14,8 @@ export class BenefitsConsumer {
     private readonly konsiService: KonsiService,
     private readonly searchService: SearchService,
   ) {}
+
+  private readonly logger = new Logger(BenefitsConsumer.name);
 
   @RabbitSubscribe({
     exchange: 'amq.direct',
@@ -42,6 +44,8 @@ export class BenefitsConsumer {
       await Promise.all(
         response.beneficios.map((benefit) => this.addBenefit(cpf, benefit)),
       );
+
+      this.logger.log(`Benefits for CPF ${cpf} added to the search index`);
     } finally {
       await mutex.release();
       await redisClient.quit();

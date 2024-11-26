@@ -45,6 +45,10 @@
         async function searchBenefits() {
             const cpf = document.getElementById('cpfInput').value;
             const resultsDiv = document.getElementById('results');
+
+            if (cpf.length === 0) {
+                return;
+            }
             
             try {
                 const response = await fetch(`/benefits/${cpf}`);
