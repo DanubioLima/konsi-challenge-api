@@ -30,6 +30,7 @@ describe('BenefitsConsumer ', () => {
   });
 
   afterEach(async () => {
+    redis.flushall();
     await redis.quit();
     await app.close();
   });

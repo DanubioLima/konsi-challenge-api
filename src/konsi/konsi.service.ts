@@ -5,8 +5,6 @@ import { BenefitDataResponse, TokenResponse } from './konsi.types';
 import { ConfigService } from '@nestjs/config';
 import Redis from 'ioredis';
 
-const REDIS_TOKEN_DATA = 'konsi:token_data';
-
 @Injectable()
 export class KonsiService {
   constructor(
@@ -15,6 +13,8 @@ export class KonsiService {
     private readonly httpService: HttpService,
     private readonly configService: ConfigService,
   ) {}
+
+  REDIS_TOKEN_KEY = this.configService.get<string>('REDIS_TOKEN_KEY');
 
   async getBenefits(cpf: string): Promise<BenefitDataResponse> {
     const response = await this.getResponse(
@@ -43,7 +43,7 @@ export class KonsiService {
   async getAccessToken(): Promise<string> {
     const ONE_MINUTE = 60 * 1000; // in milliseconds
 
-    const tokenData = await this.redis.get(REDIS_TOKEN_DATA);
+    const tokenData = await this.redis.get(this.REDIS_TOKEN_KEY);
 
     if (!tokenData) {
       return this.setNewToken();
@@ -73,7 +73,10 @@ export class KonsiService {
 
     const { token } = response.data.data;
 
-    await this.redis.set(REDIS_TOKEN_DATA, JSON.stringify(response.data.data));
+    await this.redis.set(
+      this.REDIS_TOKEN_KEY,
+      JSON.stringify(response.data.data),
+    );
 
     return token;
   }

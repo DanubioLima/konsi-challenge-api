@@ -11,8 +11,6 @@ describe('KonsiService ', () => {
   let redis: Redis;
   let configService: ConfigService;
 
-  const REDIS_TOKEN_DATA = 'konsi:token_data';
-
   beforeEach(async () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
       imports: [AppModule],
@@ -27,12 +25,14 @@ describe('KonsiService ', () => {
   });
 
   afterEach(async () => {
+    redis.flushall();
     await redis.quit();
     await app.close();
   });
 
   it('should get new token when current token expires in less than 1 minute', async () => {
     // ARRANGE
+    const REDIS_TOKEN_DATA = configService.get<string>('REDIS_TOKEN_KEY');
     const initialToken = 'initial-token';
     const initialExpiry = new Date(Date.now() - 29 * 60 * 1000).toISOString();
     await redis.set(
@@ -71,6 +71,7 @@ describe('KonsiService ', () => {
 
   it('should return current token when it not expired', async () => {
     // ARRANGE
+    const REDIS_TOKEN_DATA = configService.get<string>('REDIS_TOKEN_KEY');
     const initialToken = 'initial-token';
     const initialExpiry = new Date(Date.now() + 30 * 60 * 1000).toISOString();
     await redis.set(
