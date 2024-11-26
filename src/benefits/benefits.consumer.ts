@@ -44,8 +44,6 @@ export class BenefitsConsumer {
       await Promise.all(
         response.beneficios.map((benefit) => this.addBenefit(cpf, benefit)),
       );
-
-      this.logger.log(`Benefits for CPF ${cpf} added to the search index`);
     } finally {
       await mutex.release();
       await redisClient.quit();
@@ -53,9 +51,19 @@ export class BenefitsConsumer {
   }
 
   private async addBenefit(cpf: string, benefit: Benefit) {
+    const exists = await this.searchService.findIfExistsByCpfAndBenefit(
+      'benefits',
+      cpf,
+      benefit.numero_beneficio,
+    );
+
+    if (exists) return;
+
     await this.searchService.addDocument('benefits', {
       ...benefit,
       cpf: cpf,
     });
+
+    this.logger.log(`Benefits for CPF ${cpf} added to the 'benefits' index`);
   }
 }

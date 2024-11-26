@@ -48,6 +48,7 @@ describe('BenefitsConsumer ', () => {
       ],
     };
 
+    mockElasticExistsDocument();
     mockElasticAddDocument();
 
     const scope = nock(configService.get('KONSI_BASE_URL'))
@@ -81,5 +82,11 @@ describe('BenefitsConsumer ', () => {
 
   function mockElasticAddDocument() {
     jest.spyOn(searchService, 'addDocument').mockResolvedValue({} as any);
+  }
+
+  function mockElasticExistsDocument() {
+    jest
+      .spyOn(searchService, 'findIfExistsByCpfAndBenefit')
+      .mockResolvedValue(false);
   }
 });
