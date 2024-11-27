@@ -72,7 +72,7 @@ Ao acessar `http://localhost:3000` você deve ver essa interface simples:
 5. Para rodar os testes é só executar:
 
 ```bash
-npm run test:e2e
+npm run test
 ```
 
 6. Popular a fila do RabbitMQ:
